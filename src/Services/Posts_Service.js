@@ -5,7 +5,8 @@ const URL = 'http://localhost:3000/';
 
 var config = {
     headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MzI3NDQ0MDAsInN1YiI6Mn0.bMahhdJUZQj0GwdKevfk9SCMT3w-kKNRyLYkg6UPu78'
     }
   };
 
@@ -19,6 +20,15 @@ function login(auth) {
             return response.data
         })
         
+}
+
+function Authorizado(){
+    return axios.get(URL + 'auth', config)
+        .then(function(response){
+            console.log(response);
+            
+            return response
+        })
 }
   
 
@@ -51,4 +61,4 @@ function deletePost(id) {
         })
 }
 
-export {login, getPost, newPost, deletePost}
+export {Authorizado, login, getPost, newPost, deletePost}

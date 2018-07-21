@@ -9,7 +9,8 @@ import {
 import {
     getPost,
     deletePost,
-    newPost
+    newPost,
+    Authorizado
 } from '../../Services/Posts_Service';
 
 //Component
@@ -101,6 +102,7 @@ listPosts() {
 
 
     render() {
+        Authorizado()
         return (
             <div>
                 <h1>Posts component</h1>
