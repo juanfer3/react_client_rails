@@ -1,5 +1,11 @@
 import React, { Component } from 'react'
 
+import {  Switch, Redirect, Route } from 'react-router-dom';
+
+import createHistory from "history/createBrowserHistory"
+
+
+
 import { 
     Button, 
     Checkbox, 
@@ -11,6 +17,9 @@ import {
     login
 } from '../../Services/Posts_Service';
 
+
+const history = createHistory()
+
 export default class Login extends Component {
 
     constructor(props) {
@@ -18,7 +27,8 @@ export default class Login extends Component {
     
       this.state = {
          email:'',
-         password:''
+         password:'',
+         submitted:false
       }
       this.handleChange = this.handleChange.bind(this)
       this.loginUser = this.loginUser.bind(this)
@@ -31,46 +41,74 @@ export default class Login extends Component {
       }
 
     loginUser(){
+    
         console.log(this.state.email)
 
         const auth= {
             email: this.state.email,
             password: this.state.password
         }
-        login(auth)
+
+      return login(auth)
             .then(data =>{
                 console.log(data)
-            })
+
+                if (data == 201) {
+                   console.log('Si es Correcto');
+                   this.setState({
+                       submitted: true
+                   })
+                }
+
+            }).catch((error) => {
+                const errors = error.response.data.errors ? error.response.data.errors : {};
+                errors.summary = error.response.data.message;
+                
+                console.log(errors);
+                
+              
+              });
     }
 
   render() {
+
+    if (this.state.submitted === true) {
+        return <Redirect to={'/'} />
+    }
+
     return (
       <div>
         <h1>Login component</h1>
         <h1>{this.state.email}</h1>
         <h1>{this.state.password}</h1>
-        <Form>
+
+        <Form onSubmit={this.loginUser} >
+
             <Form.Field>
-            <label>First Name</label>
-            <input 
-            placeholder='Email' 
-            value={this.state.email}
-            name="email"
-            onChange={this.handleChange}
-            />
+                <label>First Name</label>
+                <input 
+                placeholder='Email' 
+                value={this.state.email}
+                name="email"
+                onChange={this.handleChange}
+                />
             </Form.Field>
+
             <Form.Field>
-            <label>Last Name</label>
-            <input 
-            placeholder='Password' 
-            type='password' 
-            name='password'
-            value={this.state.password}
-            onChange={this.handleChange}
-            />
+                <label>Last Name</label>
+                <input 
+                placeholder='Password' 
+                type='password' 
+                name='password'
+                value={this.state.password}
+                onChange={this.handleChange}
+                />
             </Form.Field>
             
-            <Button type='submit' onClick={this.loginUser} >Submit</Button>
+            <Button type='submit'>
+                Submit  
+            </Button>
+
         </Form>
       </div>
     )
